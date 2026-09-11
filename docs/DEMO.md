@@ -62,6 +62,12 @@ Say: the agent runs in a container, reaches the repository only through the
 MCP server on an internal route, and holds no binding to anything that has
 secrets in it. The second question has no answer for it to find.
 
+Latency on the second question is unpredictable. It has come back in about
+two and a half minutes and it has also run past six with nothing. A question
+whose answer is "it is not here" gives the model no natural stopping point,
+so it keeps searching. Ask it once before the session, and have the network
+policy output ready as the fallback if it stalls in front of an audience.
+
 If asked how it is constrained:
 
 ```bash
@@ -80,6 +86,7 @@ cf network-policies
 | The agent times out | the model address in `cf env steward-agent` is a MagicDNS name, not an address |
 | The agent crashes on start | `code-mcp-server` is not running; it connects to MCP eagerly |
 | `/ask` returns 502 | restart the agent after restarting the MCP server |
+| `/ask` never returns | the model is still searching; `cf logs code-mcp-server` shows the tool calls |
 
 ## Afterwards
 
