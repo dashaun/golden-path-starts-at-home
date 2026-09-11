@@ -54,6 +54,8 @@ down: ## Delete everything this demo created, leaving the cluster alone
 	@$(SCRIPTS)/90-down.sh
 
 slides: ## Serve the presentation at http://localhost:8000
-	@jwebserver -d "$(CURDIR)/docs" -p 8000
+	@source bin/lib-java.sh && golden::use_pinned_java "$(CURDIR)" && \
+	  echo "Presentation at http://localhost:8000  (ctrl-c to stop)" && \
+	  jwebserver -d "$(CURDIR)/docs" -p 8000
 
 .PHONY: help platform-init cluster-up org vault config-server service apps up bind unbind build test ask rotate down slides
