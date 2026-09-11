@@ -126,11 +126,25 @@ public class RepositoryTools {
         }
     }
 
+    /**
+     * Resolves a caller-supplied path against the workspace root.
+     *
+     * A leading slash means the root of the repository, not the root of the
+     * filesystem. That is what a caller means by "/" and refusing it only
+     * teaches a model to ask again. Traversal is still caught: whatever the
+     * path looks like, the normalized result has to sit under the root.
+     */
     private Path resolve(String path) {
-        String requested = (path == null || path.isBlank()) ? "." : path;
+        String requested = (path == null || path.isBlank()) ? "." : path.trim();
+        while (requested.startsWith("/")) {
+            requested = requested.substring(1);
+        }
+        if (requested.isEmpty()) {
+            requested = ".";
+        }
         Path candidate = root.resolve(requested).normalize();
         if (!candidate.startsWith(root)) {
-            throw new IllegalArgumentException("Refused: %s is outside the workspace".formatted(requested));
+            throw new IllegalArgumentException("Refused: %s is outside the workspace".formatted(path));
         }
         return candidate;
     }

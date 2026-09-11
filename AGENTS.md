@@ -53,6 +53,9 @@ own line. `golden-binding` is built against 4.0.8 and used by both.
 - The agent opens its MCP connection at startup. Restart `code-mcp-server` and
   you must restart `steward-agent` behind it, or it dies on an unresolved
   internal address.
+- A tool that throws instead of returning a message teaches a model to retry.
+  `listFiles("/")` is the first thing a model tries; refusing it as an escape
+  attempt is what made the agent loop until it timed out.
 
 ## Reveal.js markdown
 
