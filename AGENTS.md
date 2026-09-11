@@ -53,6 +53,11 @@ own line. `golden-binding` is built against 4.0.8 and used by both.
 - The agent opens its MCP connection at startup. Restart `code-mcp-server` and
   you must restart `steward-agent` behind it, or it dies on an unresolved
   internal address.
+- Printing is a different layout, and the deck's pinned title is what breaks
+  in it. Reveal adds its print class to `<html>`, not to `.reveal`, and moves
+  each slide into a `.pdf-page`, so any rule written as `.slides > section`
+  stops matching. The print rules are keyed to `@media print` instead, because
+  that class is added asynchronously and a browser may print before it lands.
 - A tool that throws instead of returning a message teaches a model to retry.
   `listFiles("/")` is the first thing a model tries; refusing it as an escape
   attempt is what made the agent loop until it timed out.

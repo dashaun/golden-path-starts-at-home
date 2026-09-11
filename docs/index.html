@@ -58,8 +58,6 @@
         .reveal .slides { text-align: left; }
         .reveal .slides > section.present:not(.stack),
         .reveal .slides > section > section.present { display: flex !important; }
-        .reveal.print-pdf .slides > section:not(.stack),
-        .reveal.print-pdf .slides > section > section { display: flex !important; }
         .reveal .slides > section,
         .reveal .slides > section > section {
             box-sizing: border-box;
@@ -414,8 +412,79 @@
         .deck-footer .pageno { font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
         body.slide-inverse .reveal .controls { color: rgba(255,255,255,.75); }
 
+        /* Printing. A handout is a document, not a slide: once the page
+           flows there is nothing for the pinned title to be pinned to, so it
+           goes back into the text and the body follows it. Keyed to the media
+           rather than to reveal's print class, because that class is added
+           asynchronously and is not reliably present when a browser prints. */
         @media print {
+            .reveal .slides section {
+                padding: 58px 64px !important;
+                display: block !important;
+                height: auto !important;
+            }
+            .reveal .slides section.stack { padding: 0 !important; }
+            /* Relative, not static: the green rule under the title is an
+               absolutely positioned ::after and needs the title itself to be
+               its containing block, or it drifts to the foot of the page. */
+            .reveal section:not(.stack) > h2:first-child {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                margin-bottom: 26px;
+            }
+            .reveal section:not(.stack) > h2:first-child::after,
+            .reveal section[data-background-color] > h2:first-child::after {
+                left: 0;
+                transform: none;
+            }
+            /* A printed page is narrower than the slide canvas, so code needs
+               to come down a step to stop wrapping mid-line. */
+            .reveal pre { margin-bottom: 20px; }
+            .reveal pre code { max-height: none; font-size: 0.86em; }
+            .reveal .split { display: block; }
+            .reveal .split > div + div { margin-top: 22px; }
+            .reveal .ledger { display: block; }
+            .reveal .ledger > div + div { margin-top: 14px; }
+            /* A printed page has no slide background behind it, so the
+               statement slides would be white text on white paper. Bring them
+               back to ink and keep the accents. */
+            .reveal section[data-background-color] { text-align: center; }
+            /* The step path is a single nowrap row that is wider than a page. */
+            .reveal .path {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: flex-start;
+            }
+            .reveal .path b { white-space: nowrap; }
+            .reveal section[data-background-color] .path { justify-content: center; }
+            .reveal section[data-background-color] h1,
+            .reveal section[data-background-color] h2,
+            .reveal section[data-background-color] h3,
+            .reveal section[data-background-color] p,
+            .reveal section[data-background-color] li { color: var(--ink) !important; }
+            .reveal section[data-background-color] .kicker,
+            .reveal section[data-background-color] strong,
+            .reveal section[data-background-color] .refrain span { color: var(--green-deep) !important; }
+            .reveal section[data-background-color] .small { color: var(--muted) !important; }
+            .reveal section[data-background-color] a { color: var(--green-deep) !important; }
+            .reveal section[data-background-color] ul > li::before { background: var(--green) !important; }
+            .reveal section[data-background-color] :not(pre) > code {
+                background: var(--green-tint) !important;
+                border-color: var(--rule) !important;
+                color: var(--green-deep) !important;
+            }
+            .reveal section[data-background-color] pre code {
+                background: #f7faf4 !important;
+                color: var(--ink) !important;
+                border-color: var(--rule) !important;
+                border-left-color: var(--green) !important;
+            }
+            .reveal .cover .rule { background: var(--green) !important; }
+            .reveal .cover .byline { color: var(--ink) !important; }
             .deck-footer { display: none; }
+            .reveal .slides::before { display: none; }
             .reveal blockquote { box-shadow: none; }
             .reveal table { box-shadow: none; border: 1px solid var(--rule); }
         }
