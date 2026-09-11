@@ -107,12 +107,34 @@ spring:
 - Spring AI 2.0, pushed like anything else
 - `AGENTS.md` instructions attached to every request
 - An internal route, so the connection never leaves the platform
+- A hard ceiling on tool calls, because asking for something that is not
+  there gives a model no reason to stop
 
 Notes:
 Demo four. Ask the agent something that requires reading the repository, like
 where secrets are allowed to live. It has to use the tools to answer. Then ask
 it for a credential and watch it come back empty, because there is nothing to
 find.
+
+---
+
+## A budget it cannot talk its way out of
+
+```java
+return DefaultToolCallingManager.builder()
+        .maxTotalToolCalls(properties.maxToolCalls())
+        .onLimitExceeded(ToolCallLimitBehavior.RETURN_ERROR_RESPONSE)
+        .build();
+```
+
+<p class="big">The number in the prompt is a request. This is the limit.</p>
+
+Notes:
+I learned this the hard way building the demo. Ask it for a credential that
+does not exist and it will search until something times out, because "it is
+not here" is not a state the model recognises as finished. The prompt asks
+for restraint and the manager enforces it. Same value, from the config repo,
+doing both jobs.
 
 ---
 

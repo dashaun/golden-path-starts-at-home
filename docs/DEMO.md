@@ -62,11 +62,11 @@ Say: the agent runs in a container, reaches the repository only through the
 MCP server on an internal route, and holds no binding to anything that has
 secrets in it. The second question has no answer for it to find.
 
-Latency on the second question is unpredictable. It has come back in about
-two and a half minutes and it has also run past six with nothing. A question
-whose answer is "it is not here" gives the model no natural stopping point,
-so it keeps searching. Ask it once before the session, and have the network
-policy output ready as the fallback if it stalls in front of an audience.
+The second question used to hang: "it is not here" is not a stopping point a
+model recognises, so it searched until something timed out. The agent now has
+a hard ceiling of `golden.agent.max-tool-calls` from the config repo, enforced
+by the tool calling manager, so it has to answer with what it has. Still ask
+it once before the session to warm the model.
 
 If asked how it is constrained:
 
