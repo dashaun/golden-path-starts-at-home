@@ -50,6 +50,9 @@ own line. `golden-binding` is built against 4.0.8 and used by both.
   the listener and every policy have to agree on 8200.
 - Network policies must exist before a consuming application starts, because
   the config client is configured to fail fast.
+- The agent opens its MCP connection at startup. Restart `code-mcp-server` and
+  you must restart `steward-agent` behind it, or it dies on an unresolved
+  internal address.
 
 ## Reveal.js markdown
 

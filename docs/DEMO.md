@@ -78,6 +78,8 @@ cf network-policies
 | Config server returns 500 | Vault is not answering on `golden-vault.apps.internal:8200` |
 | Local run cannot verify TLS | re-run `bin/dev-bind.sh` to refresh `ca.crt` |
 | The agent times out | the model address in `cf env steward-agent` is a MagicDNS name, not an address |
+| The agent crashes on start | `code-mcp-server` is not running; it connects to MCP eagerly |
+| `/ask` returns 502 | restart the agent after restarting the MCP server |
 
 ## Afterwards
 

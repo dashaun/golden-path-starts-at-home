@@ -15,9 +15,19 @@ golden::step "Asking the steward"
 echo "  ${QUESTION}"
 echo
 
-curl --silent --show-error --insecure --max-time 300 \
+body="$(curl --silent --show-error --insecure --max-time 600 \
   --request POST \
   --header 'Content-Type: application/json' \
   --data "$(QUESTION="${QUESTION}" python3 -c 'import json,os;print(json.dumps({"question":os.environ["QUESTION"]}))')" \
-  "https://steward-agent.${CF_APPS_DOMAIN}/ask" \
-  | python3 -c 'import json,sys;print(json.load(sys.stdin).get("answer","no answer"))'
+  "https://steward-agent.${CF_APPS_DOMAIN}/ask")"
+
+# A platform error comes back as prose, not JSON. Show it rather than
+# burying it under a parser stack trace.
+GOLDEN_BODY="${body}" python3 -c '
+import json, os, sys
+body = os.environ["GOLDEN_BODY"]
+try:
+    print(json.loads(body)["answer"])
+except Exception:
+    sys.exit("The agent did not answer. The platform said:\n%s" % body.strip())
+'
