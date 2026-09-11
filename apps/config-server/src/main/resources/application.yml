@@ -26,6 +26,13 @@ spring:
             token: ${VAULT_TOKEN:}
           - type: native
             search-locations: classpath:/config-repo
+          # The config repo ships inside this jar so the demo works offline,
+          # which means changing it means pushing this application again.
+          # Point at git instead and changes land on the next client refresh:
+          #
+          #   - type: git
+          #     uri: https://github.com/dashaun/golden
+          #     search-paths: config-repo
 
 server:
   port: ${PORT:8888}

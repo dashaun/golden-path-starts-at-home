@@ -70,7 +70,6 @@ golden::step "Setting the values that are locations, not secrets"
 OLLAMA_URL_FOR_PLATFORM="$(resolve_ollama)"
 cf set-env code-mcp-server GOLDEN_MCP_WORKSPACEROOT /home/vcap/app/workspace >/dev/null
 cf set-env steward-agent OLLAMA_BASE_URL "${OLLAMA_URL_FOR_PLATFORM}" >/dev/null
-cf set-env steward-agent OLLAMA_MODEL "${OLLAMA_MODEL}" >/dev/null
 cf set-env steward-agent MCP_SERVER_URL "http://code-mcp-server.apps.internal:8080" >/dev/null
 
 golden::step "Writing the network policies"

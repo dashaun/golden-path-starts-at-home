@@ -16,9 +16,9 @@ spring:
       base-url: ${OLLAMA_BASE_URL:http://juice:11434}
       init:
         pull-model-strategy: never
-      chat:
-        options:
-          model: ${OLLAMA_MODEL:muse-glimmer:30b-mlx}
+      # The model itself is not set here on purpose. It comes from
+      # config-repo/steward-agent.yml, because anything this file declares
+      # would outrank what the config server serves.
     mcp:
       client:
         name: steward-agent

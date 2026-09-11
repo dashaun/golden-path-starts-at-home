@@ -45,7 +45,7 @@ test: ## Run the tests
 	@./mvnw -B test
 
 ask: ## Ask the agent a question (make ask Q="...")
-	@$(SCRIPTS)/70-ask.sh $(Q)
+	@$(SCRIPTS)/70-ask.sh "$(Q)"
 
 rotate: ## Change the secret in Vault and refresh the running applications
 	@$(SCRIPTS)/60-rotate.sh
