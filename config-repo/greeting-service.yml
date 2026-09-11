@@ -1,0 +1,7 @@
+# Non-secret settings for the greeting service.
+# The API key it also needs is NOT here. That comes from Vault, through the
+# same config server response, and never touches this repository.
+greeting:
+  message: "Hello from the golden path"
+  audience: "developers"
+  theme: "spring-green"

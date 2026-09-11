@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: composite
+  security:
+    user:
+      name: ${CONFIG_CLIENT_USERNAME:golden}
+      password: ${CONFIG_CLIENT_PASSWORD:change-me}
+  cloud:
+    config:
+      server:
+        # Order matters. Plain settings come from the git-tracked config repo,
+        # secrets come from Vault, and Vault wins on key collisions.
+        composite:
+          - type: vault
+            # The internal route. Vault is not reachable from outside the
+            # platform, and this is the only application allowed to reach it.
+            host: ${VAULT_HOST:golden-vault.apps.internal}
+            port: ${VAULT_PORT:8200}
+            scheme: ${VAULT_SCHEME:http}
+            backend: secret
+            kv-version: 2
+            default-key: application
+            authentication: TOKEN
+            token: ${VAULT_TOKEN:}
+          - type: native
+            search-locations: classpath:/config-repo
+
+server:
+  port: ${PORT:8888}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,refresh
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
+
+logging:
+  level:
+    org.springframework.cloud.config.server: INFO

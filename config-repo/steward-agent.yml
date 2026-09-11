@@ -1,0 +1,14 @@
+# Non-secret settings for the repository steward agent.
+# The model runs on a machine reachable over the tailnet; the endpoint is
+# configuration, and any credential it needs comes from Vault.
+spring:
+  ai:
+    ollama:
+      chat:
+        options:
+          model: "muse-glimmer:30b-mlx"
+          temperature: 0.2
+golden:
+  agent:
+    name: "repository-steward"
+    max-tool-calls: 12

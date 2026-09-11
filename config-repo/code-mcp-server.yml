@@ -1,0 +1,7 @@
+# Non-secret settings for the MCP server that exposes this repository to agents.
+golden:
+  mcp:
+    # Everything the agent can read lives under this root and nowhere else.
+    workspace-root: "."
+    max-file-bytes: 262144
+    allowed-extensions: "java,xml,yml,yaml,md,properties,sh,txt,json"

@@ -1,0 +1,20 @@
+---
+applications:
+  - name: greeting-service
+    path: target/greeting-service-0.0.1-SNAPSHOT.jar
+    memory: 1G
+    instances: 1
+    buildpacks:
+      - java_buildpack
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health/liveness
+    readiness-health-check-type: http
+    readiness-health-check-http-endpoint: /actuator/health/readiness
+    routes:
+      - route: greeting-service.((apps_domain))
+      - route: greeting-service.apps.internal
+    services:
+      # The only thing this application is told about its configuration.
+      - golden-config
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'

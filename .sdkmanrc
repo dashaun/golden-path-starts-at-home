@@ -1,0 +1,3 @@
+# Enable auto-env through the sdkman_auto_env config
+java=21.0.12-librca
+maven=3.9.16

@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: code-mcp-server
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 1000
+  ai:
+    mcp:
+      server:
+        name: golden-code
+        version: 1.0.0
+        protocol: streamable
+        instructions: >
+          Read-only access to one repository. Use listFiles to explore,
+          readFile to read a single text file, and searchRepository to find a
+          literal string. There is no way to write, run, or reach anything
+          outside the workspace root.
+
+server:
+  port: ${PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh
+  endpoint:
+    health:
+      probes:
+        enabled: true

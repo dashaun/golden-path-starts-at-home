@@ -1,0 +1,22 @@
+---
+applications:
+  - name: code-mcp-server
+    # Staged by platform/scripts/50-apps.sh: the jar plus a copy of the
+    # repository the agent is allowed to read.
+    path: target/staged
+    memory: 1G
+    instances: 1
+    buildpacks:
+      - java_buildpack
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health/liveness
+    readiness-health-check-type: http
+    readiness-health-check-http-endpoint: /actuator/health/readiness
+    routes:
+      - route: code-mcp-server.((apps_domain))
+      - route: code-mcp-server.apps.internal
+    services:
+      # The only thing this application is told about its configuration.
+      - golden-config
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'

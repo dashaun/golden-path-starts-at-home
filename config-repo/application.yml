@@ -1,0 +1,11 @@
+# Defaults every application on the golden path inherits.
+# This file is tracked in git on purpose: nothing here is a secret.
+golden:
+  platform: cloud-foundry-kind
+  banner: "Configuration served by Spring Cloud Config Server"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,refresh

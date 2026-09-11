@@ -1,0 +1,10 @@
+target/
+.idea/
+*.iml
+.DS_Store
+
+# Never commit materialized bindings or platform secrets
+bindings/
+platform/.env
+platform/kind-deployment/
+temp/

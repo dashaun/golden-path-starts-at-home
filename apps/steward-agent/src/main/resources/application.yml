@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: steward-agent
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 1000
+  ai:
+    ollama:
+      # The tailnet address of the machine holding the model. This is a
+      # location, not a credential, so it lives in the config repo.
+      base-url: ${OLLAMA_BASE_URL:http://juice:11434}
+      init:
+        pull-model-strategy: never
+      chat:
+        options:
+          model: ${OLLAMA_MODEL:muse-glimmer:30b-mlx}
+    mcp:
+      client:
+        name: steward-agent
+        request-timeout: 120s
+        toolcallback:
+          enabled: true
+        streamable-http:
+          connections:
+            golden-code:
+              url: ${MCP_SERVER_URL:http://code-mcp-server.apps.internal:8080}
+
+server:
+  port: ${PORT:8082}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh
+  endpoint:
+    health:
+      probes:
+        enabled: true

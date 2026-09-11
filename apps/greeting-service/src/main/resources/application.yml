@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: greeting-service
+  # Nothing here names a host, a user, or a password. The binding supplies
+  # spring.cloud.config.uri before this import is resolved, in every environment.
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 1000
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh,env
+  endpoint:
+    health:
+      probes:
+        enabled: true

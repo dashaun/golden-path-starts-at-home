@@ -1,0 +1,19 @@
+---
+applications:
+  - name: config-server
+    path: target/config-server-0.0.1-SNAPSHOT.jar
+    memory: 1G
+    instances: 1
+    buildpacks:
+      - java_buildpack
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health/liveness
+    readiness-health-check-type: http
+    readiness-health-check-http-endpoint: /actuator/health/readiness
+    routes:
+      # Developers reach it from their laptops on the public route.
+      - route: config-server.((apps_domain))
+      # Applications on the platform reach it without leaving the cluster.
+      - route: config-server.apps.internal
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
