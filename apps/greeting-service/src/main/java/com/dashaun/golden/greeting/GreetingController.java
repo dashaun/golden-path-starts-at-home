@@ -28,12 +28,12 @@ class GreetingController {
     @GetMapping("/")
     Map<String, Object> greet() {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", greeting.message());
-        body.put("audience", greeting.audience());
-        body.put("theme", greeting.theme());
+        body.put("message", greeting.getMessage());
+        body.put("audience", greeting.getAudience());
+        body.put("theme", greeting.getTheme());
         body.put("boundTo", redact(configUri));
-        body.put("partnerTenant", partnerApi.tenant());
-        body.put("partnerKey", mask(partnerApi.key()));
+        body.put("partnerTenant", partnerApi.getTenant());
+        body.put("partnerKey", mask(partnerApi.getKey()));
         return body;
     }
 
@@ -43,7 +43,7 @@ class GreetingController {
      */
     @GetMapping("/secret-fingerprint")
     Map<String, Object> fingerprint() {
-        String key = partnerApi.key();
+        String key = partnerApi.getKey();
         return Map.of(
                 "present", key != null && !key.isBlank(),
                 "length", key == null ? 0 : key.length(),

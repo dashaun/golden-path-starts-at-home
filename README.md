@@ -117,6 +117,11 @@ make rotate
 Writes a new value into Vault, asks the running application to refresh, and
 shows the fingerprint changing. No rebuild, no redeploy, no developer.
 
+## Run the talk
+
+`docs/DEMO.md` is the runbook: four demos, the exact commands, what to say,
+and what to check when something misbehaves.
+
 ## The slides
 
 ```bash

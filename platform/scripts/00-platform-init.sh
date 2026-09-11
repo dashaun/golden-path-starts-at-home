@@ -11,7 +11,7 @@ if [[ -f "${ENV_FILE}" ]]; then
   exit 0
 fi
 
-rand() { LC_ALL=C tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 32; }
+rand() { openssl rand -hex 16; }
 
 sed \
   -e "s|^VAULT_ROOT_TOKEN=.*|VAULT_ROOT_TOKEN=$(rand)|" \

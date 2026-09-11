@@ -38,9 +38,38 @@ push greeting-service
 push code-mcp-server
 push steward-agent
 
+# An application container is not a member of your tailnet, so it cannot
+# resolve a MagicDNS name. It can route to the address, so resolve the name
+# here and hand the container the result.
+resolve_ollama() {
+  local url="${OLLAMA_BASE_URL}"
+  local rest="${url#*://}"
+  local scheme="${url%%://*}"
+  local hostport="${rest%%/*}"
+  local host="${hostport%%:*}"
+  local port="${hostport#*:}"
+  [[ "${port}" == "${hostport}" ]] && port=""
+
+  if [[ "${host}" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    printf '%s' "${url}"
+    return
+  fi
+
+  local address
+  address="$(ping -c1 -t1 "${host}" 2>/dev/null | head -1 | sed -n 's/.*(\([0-9.]*\)).*/\1/p')"
+  if [[ -z "${address}" ]]; then
+    echo "  could not resolve ${host}; the agent will get the name as written" >&2
+    printf '%s' "${url}"
+    return
+  fi
+  echo "  ${host} resolves to ${address}" >&2
+  printf '%s://%s%s' "${scheme}" "${address}" "${port:+:${port}}"
+}
+
 golden::step "Setting the values that are locations, not secrets"
+OLLAMA_URL_FOR_PLATFORM="$(resolve_ollama)"
 cf set-env code-mcp-server GOLDEN_MCP_WORKSPACEROOT /home/vcap/app/workspace >/dev/null
-cf set-env steward-agent OLLAMA_BASE_URL "${OLLAMA_BASE_URL}" >/dev/null
+cf set-env steward-agent OLLAMA_BASE_URL "${OLLAMA_URL_FOR_PLATFORM}" >/dev/null
 cf set-env steward-agent OLLAMA_MODEL "${OLLAMA_MODEL}" >/dev/null
 cf set-env steward-agent MCP_SERVER_URL "http://code-mcp-server.apps.internal:8080" >/dev/null
 

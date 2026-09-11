@@ -3,7 +3,7 @@
 <div class="ledger">
 <div><strong>Name</strong><p>What to call it.</p><p><code>golden-config</code></p></div>
 <div><strong>Type</strong><p>What kind of thing it is.</p><p><code>config</code></p></div>
-<div><strong>Credentials</strong><p>How to reach it and prove who you are.</p><p><code>uri</code>, <code>username</code>, <code>password</code></p></div>
+<div><strong>Credentials</strong><p>How to reach it, how to prove who you are, and how to verify it back.</p><p><code>uri</code>, <code>username</code>, <code>password</code>, <code>ca.crt</code></p></div>
 </div>
 
 <p class="big">The application asks for a type. The platform picks the instance.</p>
@@ -19,36 +19,27 @@ application can read it in three different places without noticing.
 
 <div class="split">
 <div>
-
-### On a laptop
-
-```text
-bindings/golden-config/
-  type      -> config
-  uri       -> https://config-server...
-  username  -> golden
-  password  -> ...
-```
-
+<h3>On a laptop</h3>
+<pre><code class="language-text">bindings/golden-config/
+  type      -&gt; config
+  uri       -&gt; https://config-server...
+  username  -&gt; golden
+  password  -&gt; ...
+  ca.crt    -&gt; the platform's authority</code></pre>
 </div>
 <div>
-
-### On Cloud Foundry
-
-```json
-{ "user-provided": [{
+<h3>On Cloud Foundry</h3>
+<pre><code class="language-json">{ "user-provided": [{
     "name": "golden-config",
     "tags": ["config"],
     "credentials": {
       "uri": "http://config-server...",
       "username": "golden",
-      "password": "..." }}]}
-```
-
+      "password": "..." }}]}</code></pre>
 </div>
 </div>
 
-<p class="small">Kubernetes uses the directory form. Cloud Foundry uses the JSON form. Same three keys.</p>
+<p class="small">Kubernetes uses the directory form. Cloud Foundry uses the JSON form. Same keys.</p>
 
 Notes:
 Left is a directory of files, which is what the service binding spec says and
@@ -92,7 +83,8 @@ bin/dev-bind.sh
 
 - Uses the identity you already have from `cf login`
 - Reads the credentials the platform is holding, not ones you were sent
-- Writes them to a git-ignored directory, mode 600
+- Gets the platform's certificate authority in the same handful of files
+- Writes all of it to a git-ignored directory, mode 600
 - `bin/dev-unbind.sh` removes every trace
 
 <p class="big">Nothing was typed. Nothing was stored in the repository. Nothing went into your shell.</p>

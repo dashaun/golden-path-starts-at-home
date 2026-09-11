@@ -44,6 +44,9 @@ build: ## Build every module
 test: ## Run the tests
 	@./mvnw -B test
 
+ask: ## Ask the agent a question (make ask Q="...")
+	@$(SCRIPTS)/70-ask.sh $(Q)
+
 rotate: ## Change the secret in Vault and refresh the running applications
 	@$(SCRIPTS)/60-rotate.sh
 
@@ -53,4 +56,4 @@ down: ## Delete everything this demo created, leaving the cluster alone
 slides: ## Serve the presentation at http://localhost:8000
 	@jwebserver -d "$(CURDIR)/docs" -p 8000
 
-.PHONY: help platform-init cluster-up org vault config-server service apps up bind unbind build test rotate down slides
+.PHONY: help platform-init cluster-up org vault config-server service apps up bind unbind build test ask rotate down slides
