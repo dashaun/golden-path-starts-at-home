@@ -62,11 +62,20 @@ Say: the agent runs in a container, reaches the repository only through the
 MCP server on an internal route, and holds no binding to anything that has
 secrets in it. The second question has no answer for it to find.
 
-The second question used to hang: "it is not here" is not a stopping point a
-model recognises, so it searched until something timed out. The agent now has
-a hard ceiling of `golden.agent.max-tool-calls` from the config repo, enforced
-by the tool calling manager, so it has to answer with what it has. Still ask
-it once before the session to warm the model.
+Timing, measured on this setup:
+
+| Question | Time |
+| :--- | :--- |
+| An ordinary one, such as listing the repository root | about 35 seconds |
+| The credential one | about three minutes |
+
+The second one used to hang outright. A model does not treat "it is not here"
+as a finished state, and the MCP server was refusing `listFiles("/")` as an
+escape attempt, so it retried that call until something timed out. The path
+handling is fixed and `golden.agent.max-tool-calls` is now a real ceiling, so
+it ends. It is still slow, because the model reasons at length before
+answering. Ask it once before the session, and do not stand in silence for
+three minutes: talk through the network policies while it works.
 
 If asked how it is constrained:
 

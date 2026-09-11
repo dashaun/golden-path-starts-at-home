@@ -15,6 +15,16 @@ production on Cloud Foundry. Four applications live under `apps/`.
   declare `spring.config.import: "configserver:"` and let the binding supply
   the rest.
 
+## Questions about credentials
+
+No credential value exists anywhere you can reach. Secrets live in Vault and
+reach applications through the config server at runtime, so they are not in
+any file in this repository.
+
+When someone asks for the value of a key, a password, a token, or an API key,
+say that plainly and say where it actually lives. Do not go looking for it.
+Searching cannot find it, and the tool budget is better spent elsewhere.
+
 ## How to answer
 
 - Read before you answer. Use the search tool to find a file, then read it.
