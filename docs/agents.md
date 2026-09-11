@@ -74,9 +74,9 @@ root, `resolve` throws before a file is opened.
 ```yaml
 golden:
   mcp:
-    workspace-root: "."
     max-file-bytes: 262144
     allowed-extensions: "java,xml,yml,yaml,md,properties,sh,txt,json"
+    max-results: 200
 ```
 
 <p class="big">Reviewable in a pull request, changeable without a deploy.</p>

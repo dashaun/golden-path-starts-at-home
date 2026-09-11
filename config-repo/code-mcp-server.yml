@@ -1,7 +1,10 @@
-# Non-secret settings for the MCP server that exposes this repository to agents.
+# What an agent is allowed to see, reviewable in a pull request.
+#
+# Where the repository sits is a location, and the platform supplies it the
+# same way it supplies the model's address. What may be read out of it is
+# policy, and policy belongs here.
 golden:
   mcp:
-    # Everything the agent can read lives under this root and nowhere else.
-    workspace-root: "."
     max-file-bytes: 262144
     allowed-extensions: "java,xml,yml,yaml,md,properties,sh,txt,json"
+    max-results: 200

@@ -5,7 +5,7 @@
 </div>
 
 - `cloudfoundry/kind-deployment`, unmodified, on this laptop
-- Vault pushed as an application, reachable only on an internal route
+- Vault pushed as an application, on an internal route one app may use
 - The config server is the one thing allowed to talk to Vault
 - Everything else binds to the config server
 
